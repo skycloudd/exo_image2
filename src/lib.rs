@@ -1,7 +1,7 @@
 use base64::{engine::general_purpose, Engine as _};
+use exolvl::{Colour, Exolvl, Object, ObjectProperty, Read as _, Vec2, Write as _};
 use flate2::{write::GzEncoder, Compression};
 use image::{imageops::FilterType, io::Reader, DynamicImage, GenericImageView};
-use levelfile::{Colour, Exolvl, Object, ObjectProperty, Read as _, Vec2, Write as _};
 use std::io::{BufReader, Cursor, Write};
 use uuid::Uuid;
 use wasm_bindgen::prelude::*;
@@ -38,8 +38,8 @@ pub fn convert(
 
     level.local_level.level_id = Uuid::new_v4().to_string();
     level.local_level.level_name = level_name.to_string();
-    level.local_level.creation_date = (&created_time).into();
-    level.local_level.update_date = (&created_time).into();
+    level.local_level.creation_date = created_time;
+    level.local_level.update_date = created_time;
 
     process_image(&mut level, img, should_resize, width, height);
 
