@@ -32,7 +32,35 @@ fn convert_gif_inner(image_data_url: &str, level_name: &str) -> Result<Vec<u8>, 
 
     let frames = decoder.into_frames();
 
-    let pattern = pattern(frames)?;
+    let pattern = pattern_frames(frames)?;
+
+    level.level_data.patterns.push(pattern);
+
+    update_level_properties(&mut level, level_name);
+
+    set_theme(&mut level);
+
+    write_level(&level)
+}
+
+#[wasm_bindgen]
+pub fn convert_image_pattern(image_data_url: &str, level_name: &str) -> Result<Vec<u8>, String> {
+    convert_image_pattern_inner(image_data_url, level_name).map_err(|e| e.to_string())
+}
+
+fn convert_image_pattern_inner(
+    image_data_url: &str,
+    level_name: &str,
+) -> Result<Vec<u8>, Box<dyn Error>> {
+    let mut level = read_level()?;
+
+    let img = read_image_bytes(image_data_url)?;
+
+    let img = Reader::new(Cursor::new(img))
+        .with_guessed_format()?
+        .decode()?;
+
+    let pattern = pattern_single(img)?;
 
     level.level_data.patterns.push(pattern);
 
@@ -113,7 +141,7 @@ fn read_image_bytes(image_data_url: &str) -> Result<Vec<u8>, Box<dyn Error>> {
     Ok(general_purpose::STANDARD.decode(img)?)
 }
 
-fn pattern(gif_frames: Frames) -> Result<Pattern, Box<dyn Error>> {
+fn pattern_frames(gif_frames: Frames) -> Result<Pattern, Box<dyn Error>> {
     let mut pattern_frames = Vec::new();
 
     for frame in gif_frames.collect::<Result<Vec<_>, _>>()? {
@@ -128,11 +156,26 @@ fn pattern(gif_frames: Frames) -> Result<Pattern, Box<dyn Error>> {
         pattern_frames.push(exolvl::Image(img_buf));
     }
 
-    let mut rng = rand::thread_rng();
+    let pattern_id = rand::thread_rng().gen::<i32>();
 
     Ok(Pattern {
-        pattern_id: rng.gen::<i32>(),
+        pattern_id,
         pattern_frames,
+    })
+}
+
+fn pattern_single(img: DynamicImage) -> Result<Pattern, Box<dyn Error>> {
+    let mut img_buf = Vec::new();
+
+    let encoder = PngEncoder::new(&mut img_buf);
+
+    encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color())?;
+
+    let pattern_id = rand::thread_rng().gen::<i32>();
+
+    Ok(Pattern {
+        pattern_id,
+        pattern_frames: vec![exolvl::Image(img_buf)],
     })
 }
 

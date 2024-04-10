@@ -8,6 +8,12 @@
 export function convert_gif(image_data_url: string, level_name: string): Uint8Array;
 /**
 * @param {string} image_data_url
+* @param {string} level_name
+* @returns {Uint8Array}
+*/
+export function convert_image_pattern(image_data_url: string, level_name: string): Uint8Array;
+/**
+* @param {string} image_data_url
 * @param {boolean} should_resize
 * @param {number} width
 * @param {number} height
@@ -21,6 +27,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly convert_gif: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly convert_image_pattern: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly convert: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;

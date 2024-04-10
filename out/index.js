@@ -1,4 +1,8 @@
-import init, { convert, convert_gif } from "./exo_image2.js";
+import init, {
+    convert,
+    convert_gif,
+    convert_image_pattern,
+} from "./exo_image2.js";
 
 init();
 
@@ -7,7 +11,7 @@ try {
         "click",
         function () {
             try {
-                run_exo_image(false);
+                run_exo_image(1);
             } catch (error) {
                 alert("Error: " + error);
             }
@@ -21,7 +25,7 @@ try {
         "click",
         function () {
             try {
-                run_exo_image(true);
+                run_exo_image(2);
             } catch (error) {
                 alert("Error: " + error);
             }
@@ -30,8 +34,30 @@ try {
     );
 } catch (error) {}
 
-function run_exo_image(gif) {
-    let f = document.getElementById("image-upload").files[0];
+try {
+    document.getElementById("generate-image-pattern-button").addEventListener(
+        "click",
+        function () {
+            try {
+                run_exo_image(3);
+            } catch (error) {
+                alert("Error: " + error);
+            }
+        },
+        false
+    );
+} catch (error) {}
+
+function run_exo_image(type) {
+    let f;
+
+    if (type == 1 || type == 3) {
+        f = document.getElementById("image-upload").files[0];
+    } else if (type == 2) {
+        f = document.getElementById("gif-upload").files[0];
+    } else {
+        throw "you should not be able to see this";
+    }
 
     if (!f) {
         throw "No file selected";
@@ -41,12 +67,22 @@ function run_exo_image(gif) {
 
     r.onloadend = function (e) {
         let lvl_name =
-            (gif ? "exogif" : "exoimage") +
+            (type == 1 ? "exoimage" : type == 2 ? "exogif" : "exopattern") +
             "-" +
             new Date().toISOString().split(".")[0].replace(/[^\d]/gi, "") +
             ".exolvl";
 
-        let result = gif ? runConvertGif(e, lvl_name) : runConvert(e, lvl_name);
+        let result;
+
+        if (type == 1) {
+            result = runConvert(e, lvl_name);
+        } else if (type == 2) {
+            result = runConvertGif(e, lvl_name);
+        } else if (type == 3) {
+            result = runConvertImagePattern(e, lvl_name);
+        } else {
+            throw "you should not be able to see this";
+        }
 
         let blob = new Blob([result], { type: "application/octet-stream" });
 
@@ -79,4 +115,8 @@ function runConvert(e, lvl_name) {
 
 function runConvertGif(e, lvl_name) {
     return convert_gif(e.target.result, lvl_name);
+}
+
+function runConvertImagePattern(e, lvl_name) {
+    return convert_image_pattern(e.target.result, lvl_name);
 }
