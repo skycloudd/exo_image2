@@ -6,6 +6,8 @@ use std::io::{BufReader, Cursor, Write};
 use uuid::Uuid;
 use wasm_bindgen::prelude::*;
 
+const LEVELFILE: &[u8; 432] = include_bytes!("default.exolvl");
+
 #[wasm_bindgen]
 pub fn convert(
     image_data_url: &str,
@@ -14,8 +16,6 @@ pub fn convert(
     height: u32,
     level_name: &str,
 ) -> Result<Vec<u8>, String> {
-    let input = include_bytes!("../default.exolvl");
-
     let img = image_data_url
         .split(',')
         .nth(1)
@@ -32,7 +32,7 @@ pub fn convert(
         .map_err(|e| e.to_string())?;
 
     let mut level =
-        Exolvl::read(&mut BufReader::new(&input[..])).map_err(|e| format!("{:?}", e))?;
+        Exolvl::read(&mut BufReader::new(&LEVELFILE[..])).map_err(|e| format!("{:?}", e))?;
 
     let created_time = chrono::Utc::now();
 
@@ -51,7 +51,7 @@ pub fn convert(
 
     e.write_all(&output).map_err(|e| e.to_string())?;
 
-    Ok(e.finish().map_err(|e| e.to_string())?)
+    e.finish().map_err(|e| e.to_string())
 }
 
 fn process_image(
@@ -69,9 +69,9 @@ fn process_image(
 
     let layer = level.level_data.layers.get_mut(0).unwrap();
 
-    let mut entity_id = 0;
+    for (entity_id, pixel) in pixels.enumerate() {
+        let entity_id = entity_id.try_into().unwrap();
 
-    for pixel in pixels {
         let obj = Object {
             entity_id,
             tile_id: 113491821,
@@ -98,8 +98,6 @@ fn process_image(
         level.level_data.objects.push(obj);
 
         layer.children.push(entity_id);
-
-        entity_id += 1;
     }
 
     level.level_data.theme = "custom".to_string();
