@@ -119,8 +119,6 @@ fn pattern(gif_frames: Frames) -> Result<Pattern, Box<dyn Error>> {
     for frame in gif_frames.collect::<Result<Vec<_>, _>>()? {
         let img = DynamicImage::ImageRgba8(frame.into_buffer());
 
-        let img = img.resize_exact(512, 512, FilterType::Lanczos3);
-
         let mut img_buf = Vec::new();
 
         let encoder = PngEncoder::new(&mut img_buf);
