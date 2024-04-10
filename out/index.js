@@ -41,7 +41,8 @@ function run_exo_image(gif) {
 
     r.onloadend = function (e) {
         let lvl_name =
-            "exoimage-" +
+            (gif ? "exogif" : "exoimage") +
+            "-" +
             new Date().toISOString().split(".")[0].replace(/[^\d]/gi, "") +
             ".exolvl";
 
