@@ -1,44 +1,81 @@
-import init, { convert } from "./exo_image2.js";
+import init, { convert, convert_gif } from "./exo_image2.js";
 
 init();
 
-document.getElementById("generate-button").addEventListener(
-    "click",
-    function runConvert() {
-        var f = document.getElementById("image-upload").files[0];
-        var r = new FileReader();
+try {
+    document.getElementById("generate-button").addEventListener(
+        "click",
+        function () {
+            try {
+                run_exo_image(false);
+            } catch (error) {
+                alert("Error: " + error);
+            }
+        },
+        false
+    );
+} catch (error) {}
 
-        r.onloadend = function (e) {
-            var should_resize =
-                document.getElementById("resize-checkbox").checked;
+try {
+    document.getElementById("generate-gif-button").addEventListener(
+        "click",
+        function () {
+            try {
+                run_exo_image(true);
+            } catch (error) {
+                alert("Error: " + error);
+            }
+        },
+        false
+    );
+} catch (error) {}
 
-            var resize_width = document.getElementById("resize-width").value;
-            var resize_height = document.getElementById("resize-height").value;
+function run_exo_image(gif) {
+    let f = document.getElementById("image-upload").files[0];
 
-            var lvl_name =
-                "exoimage-" +
-                new Date().toISOString().split(".")[0].replace(/[^\d]/gi, "") +
-                ".exolvl";
+    if (!f) {
+        throw "No file selected";
+    }
 
-            var result = convert(
-                e.target.result,
-                should_resize,
-                resize_width,
-                resize_height,
-                lvl_name
-            );
+    let r = new FileReader();
 
-            var blob = new Blob([result], { type: "application/octet-stream" });
+    r.onloadend = function (e) {
+        let lvl_name =
+            "exoimage-" +
+            new Date().toISOString().split(".")[0].replace(/[^\d]/gi, "") +
+            ".exolvl";
 
-            var a = document.getElementById("download-a");
-            a.href = window.URL.createObjectURL(blob);
-            a.download = lvl_name;
+        let result = gif ? runConvertGif(e, lvl_name) : runConvert(e, lvl_name);
 
-            var button = document.getElementById("download-button");
-            button.disabled = false;
-        };
+        let blob = new Blob([result], { type: "application/octet-stream" });
 
-        r.readAsDataURL(f);
-    },
-    false
-);
+        let a = document.getElementById("download-a");
+        a.href = window.URL.createObjectURL(blob);
+        a.download = lvl_name;
+
+        let button = document.getElementById("download-button");
+
+        button.disabled = false;
+    };
+
+    r.readAsDataURL(f);
+}
+
+function runConvert(e, lvl_name) {
+    let should_resize = document.getElementById("resize-checkbox").checked;
+
+    let resize_width = document.getElementById("resize-width").value;
+    let resize_height = document.getElementById("resize-height").value;
+
+    return convert(
+        e.target.result,
+        should_resize,
+        resize_width,
+        resize_height,
+        lvl_name
+    );
+}
+
+function runConvertGif(e, lvl_name) {
+    return convert_gif(e.target.result, lvl_name);
+}
