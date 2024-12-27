@@ -1,126 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Exo Image 2.0</title>
-        <link rel="stylesheet" href="./style.css" />
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <meta
-            property="og:url"
-            content="https://skycloudd.github.io/exo_image2/image.html"
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Exo Image 2.0" />
-        <meta
-            property="og:description"
-            content="Easily convert images to .exolvl files"
-        />
+<head>
+    <title>Exo Image 2.0</title>
+    <link rel="stylesheet" href="./style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <script src="./index.js" type="module"></script>
-    </head>
+    <meta property="og:url" content="https://skycloudd.github.io/exo_image2/image.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Exo Image 2.0" />
+    <meta property="og:description" content="Easily convert images to .exolvl files" />
 
-    <body>
-        <main>
-            <h1>Exo Image 2.0</h1>
+    <script src="./index.js" type="module"></script>
+</head>
 
-            <a href="./">&larrhk; Back to Exo Tools</a>
+<body>
+    <main>
+        <h1>Exo Image 2.0</h1>
 
-            <p class="warning">
-                Having too many objects causes a lot of lag. Remove the objects
-                from your level after setting the thumbnail!
+        <a href="./">&larrhk; Back to Exo Tools</a>
+
+        <p class="warning">
+            Having too many objects causes a lot of lag. Remove the objects
+            from your level after setting the thumbnail!
+        </p>
+
+        <section>
+            <h2>Upload image</h2>
+
+            <input type="file" id="image-upload" name="image-upload" accept="image/*" />
+        </section>
+        <section>
+            <h2>Settings</h2>
+
+            <section>
+                <h3>Resize</h3>
+
+                <p>
+                    <input type="checkbox" id="resize-checkbox" name="resize-checkbox" checked />
+                    <label for="resize-checkbox">Resize
+                        <span title="don't be like kopelat">(recommended for large images)</span></label>
+                </p>
+
+                <p>
+                    <input type="number" id="resize-width" name="resize-width" min="0" max="1000" value="200" />
+                    <label for="resize-width">Max. width</label>
+                </p>
+
+                <p>
+                    <input type="number" id="resize-height" name="resize-height" min="0" max="1000" value="200" />
+                    <label for="resize-height">Max. height</label>
+                </p>
+            </section>
+        </section>
+        <section>
+            <h2>Generate and download</h2>
+
+            <p>
+                <button id="generate-button">Generate</button>
+
+                <a id="download-a">
+                    <button disabled id="download-button">Download</button>
+                </a>
             </p>
+        </section>
+        <section>
+            <h2>How to use</h2>
 
-            <section>
-                <h2>Upload image</h2>
+            <ol>
+                <li>Upload an image</li>
+                <li>Optionally resize the image</li>
+                <li>Click "Generate"</li>
+                <li>Wait for the image to be processed</li>
+                <li>Click "Download"</li>
+                <li>
+                    Use the "Import level" option in Exoracer to import the
+                    .exolvl file
+                </li>
+            </ol>
+        </section>
 
-                <input
-                    type="file"
-                    id="image-upload"
-                    name="image-upload"
-                    accept="image/*"
-                />
-            </section>
-            <section>
-                <h2>Settings</h2>
+        <footer>
+            <p>
+                Source code available on
+                <a href="https://github.com/skycloudd/exo_image2">GitHub</a>
+                | Trans rights are human rights
+            </p>
+        </footer>
+    </main>
+</body>
 
-                <section>
-                    <h3>Resize</h3>
-
-                    <p>
-                        <input
-                            type="checkbox"
-                            id="resize-checkbox"
-                            name="resize-checkbox"
-                            checked
-                        />
-                        <label for="resize-checkbox"
-                            >Resize
-                            <span title="don't be like kopelat"
-                                >(recommended for large images)</span
-                            ></label
-                        >
-                    </p>
-
-                    <p>
-                        <input
-                            type="number"
-                            id="resize-width"
-                            name="resize-width"
-                            min="0"
-                            max="1000"
-                            value="200"
-                        />
-                        <label for="resize-width">Max. width</label>
-                    </p>
-
-                    <p>
-                        <input
-                            type="number"
-                            id="resize-height"
-                            name="resize-height"
-                            min="0"
-                            max="1000"
-                            value="200"
-                        />
-                        <label for="resize-height">Max. height</label>
-                    </p>
-                </section>
-            </section>
-            <section>
-                <h2>Generate and download</h2>
-
-                <p>
-                    <button id="generate-button">Generate</button>
-
-                    <a id="download-a">
-                        <button disabled id="download-button">Download</button>
-                    </a>
-                </p>
-            </section>
-            <section>
-                <h2>How to use</h2>
-
-                <ol>
-                    <li>Upload an image</li>
-                    <li>Optionally resize the image</li>
-                    <li>Click "Generate"</li>
-                    <li>Wait for the image to be processed</li>
-                    <li>Click "Download"</li>
-                    <li>
-                        Use the "Import level" option in Exoracer to import the
-                        .exolvl file
-                    </li>
-                </ol>
-            </section>
-
-            <footer>
-                <p>
-                    Source code available on
-                    <a href="https://github.com/skycloudd/exo_image2">GitHub</a>
-                    | Trans rights are human rights
-                </p>
-            </footer>
-        </main>
-    </body>
 </html>

@@ -1,174 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Exo Pattern</title>
-        <link rel="stylesheet" href="./style.css" />
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <meta
-            property="og:url"
-            content="https://skycloudd.github.io/exo_image2/pattern.html"
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Exo Pattern" />
-        <meta
-            property="og:description"
-            content="Easily import images and GIFs into .exolvl files as (animated) patterns"
-        />
+<head>
+    <title>Exo Pattern</title>
+    <link rel="stylesheet" href="./style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <script src="./index.js" type="module"></script>
+    <meta property="og:url" content="https://skycloudd.github.io/exo_image2/pattern.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Exo Pattern" />
+    <meta property="og:description" content="Easily import images and GIFs into .exolvl files as (animated) patterns" />
 
-        <script>
-            function ChangeDropdowns(value) {
-                if (value == "image") {
-                    let imagepattern =
-                        document.getElementsByClassName("imagepattern");
-                    let gifpattern =
-                        document.getElementsByClassName("gifpattern");
+    <script src="./index.js" type="module"></script>
 
-                    for (let i = 0; i < imagepattern.length; i++) {
-                        imagepattern[i].style.display = "block";
-                    }
+    <script>
+        function ChangeDropdowns(value) {
+            if (value == "image") {
+                let imagepattern =
+                    document.getElementsByClassName("imagepattern");
+                let gifpattern =
+                    document.getElementsByClassName("gifpattern");
 
-                    for (let i = 0; i < gifpattern.length; i++) {
-                        gifpattern[i].style.display = "none";
-                    }
-                } else if (value == "gif") {
-                    let imagepattern =
-                        document.getElementsByClassName("imagepattern");
-                    let gifpattern =
-                        document.getElementsByClassName("gifpattern");
+                for (let i = 0; i < imagepattern.length; i++) {
+                    imagepattern[i].style.display = "block";
+                }
 
-                    for (let i = 0; i < imagepattern.length; i++) {
-                        imagepattern[i].style.display = "none";
-                    }
+                for (let i = 0; i < gifpattern.length; i++) {
+                    gifpattern[i].style.display = "none";
+                }
+            } else if (value == "gif") {
+                let imagepattern =
+                    document.getElementsByClassName("imagepattern");
+                let gifpattern =
+                    document.getElementsByClassName("gifpattern");
 
-                    for (let i = 0; i < gifpattern.length; i++) {
-                        gifpattern[i].style.display = "block";
-                    }
+                for (let i = 0; i < imagepattern.length; i++) {
+                    imagepattern[i].style.display = "none";
+                }
+
+                for (let i = 0; i < gifpattern.length; i++) {
+                    gifpattern[i].style.display = "block";
                 }
             }
-        </script>
-    </head>
+        }
+    </script>
+</head>
 
-    <body>
-        <main>
-            <h1>Exo Pattern</h1>
+<body>
+    <main>
+        <h1>Exo Pattern</h1>
 
-            <a href="./">&larrhk; Back to Exo Tools</a>
+        <a href="./">&larrhk; Back to Exo Tools</a>
 
-            <section>
-                <h2>Image type</h2>
+        <section>
+            <h2>Image type</h2>
 
-                <p>
-                    Exo Pattern supports both images and GIFs. Please select the
-                    type of file you want to upload.
-                </p>
+            <p>
+                Exo Pattern supports both images and GIFs. Please select the
+                type of file you want to upload.
+            </p>
 
-                <p>
-                    <select onchange="ChangeDropdowns(this.value);">
-                        <option value="image">Image</option>
-                        <option value="gif">GIF</option>
-                    </select>
-                </p>
-            </section>
+            <p>
+                <select onchange="ChangeDropdowns(this.value);">
+                    <option value="image">Image</option>
+                    <option value="gif">GIF</option>
+                </select>
+            </p>
+        </section>
 
-            <section>
-                <h2 class="imagepattern">Upload an image</h2>
-                <h2 class="gifpattern">Upload a GIF</h2>
+        <section>
+            <h2 class="imagepattern">Upload an image</h2>
+            <h2 class="gifpattern">Upload a GIF</h2>
 
-                <p>
-                    <input
-                        type="file"
-                        id="image-upload"
-                        class="imagepattern"
-                        name="image-upload"
-                        accept="image/*"
-                    />
-                </p>
+            <p>
+                <input type="file" id="image-upload" class="imagepattern" name="image-upload" accept="image/*" />
+            </p>
 
-                <p>
-                    <input
-                        type="file"
-                        id="gif-upload"
-                        class="gifpattern"
-                        name="gif-upload"
-                        accept="image/gif"
-                    />
-                </p>
-            </section>
-            <section>
-                <h2>Generate and download</h2>
+            <p>
+                <input type="file" id="gif-upload" class="gifpattern" name="gif-upload" accept="image/gif" />
+            </p>
+        </section>
+        <section>
+            <h2>Generate and download</h2>
 
-                <p>
-                    <button
-                        class="imagepattern"
-                        id="generate-image-pattern-button"
-                    >
-                        Generate image pattern
-                    </button>
-                </p>
+            <p>
+                <button class="imagepattern" id="generate-image-pattern-button">
+                    Generate image pattern
+                </button>
+            </p>
 
-                <p>
-                    <button class="gifpattern" id="generate-gif-button">
-                        Generate GIF pattern
-                    </button>
-                </p>
+            <p>
+                <button class="gifpattern" id="generate-gif-button">
+                    Generate GIF pattern
+                </button>
+            </p>
 
-                <a id="download-a">
-                    <button disabled id="download-button">Download</button>
-                </a>
-            </section>
-            <section>
-                <h2>How to use</h2>
+            <a id="download-a">
+                <button disabled id="download-button">Download</button>
+            </a>
+        </section>
+        <section>
+            <h2>How to use</h2>
 
-                <ol class="imagepattern">
-                    <li>Upload an image</li>
-                    <li>Click "Generate"</li>
-                    <li>Wait for the image to be processed</li>
-                    <li>Click "Download"</li>
-                    <li>
-                        Use the "Import level" option in Exoracer to import the
-                        .exolvl file
-                    </li>
-                    <li>
-                        <strong
-                            >IMPORTANT: Copy the newly created pattern into your
-                            own level!</strong
-                        >
-                    </li>
-                </ol>
+            <ol class="imagepattern">
+                <li>Upload an image</li>
+                <li>Click "Generate"</li>
+                <li>Wait for the image to be processed</li>
+                <li>Click "Download"</li>
+                <li>
+                    Use the "Import level" option in Exoracer to import the
+                    .exolvl file
+                </li>
+                <li>
+                    <strong>IMPORTANT: Copy the newly created pattern into your
+                        own level!</strong>
+                </li>
+            </ol>
 
-                <ol class="gifpattern">
-                    <li>Upload a GIF</li>
-                    <li>Click "Generate"</li>
-                    <li>Wait for the GIF to be processed</li>
-                    <li>Click "Download"</li>
-                    <li>
-                        Use the "Import level" option in Exoracer to import the
-                        .exolvl file
-                    </li>
-                    <li>
-                        <strong
-                            >IMPORTANT: Copy the newly created pattern into your
-                            own level!</strong
-                        >
-                    </li>
-                </ol>
-            </section>
+            <ol class="gifpattern">
+                <li>Upload a GIF</li>
+                <li>Click "Generate"</li>
+                <li>Wait for the GIF to be processed</li>
+                <li>Click "Download"</li>
+                <li>
+                    Use the "Import level" option in Exoracer to import the
+                    .exolvl file
+                </li>
+                <li>
+                    <strong>IMPORTANT: Copy the newly created pattern into your
+                        own level!</strong>
+                </li>
+            </ol>
+        </section>
 
-            <footer>
-                <p>
-                    Source code available on
-                    <a href="https://github.com/skycloudd/exo_image2">GitHub</a>
-                    | Trans rights are human rights
-                </p>
-            </footer>
-        </main>
+        <footer>
+            <p>
+                Source code available on
+                <a href="https://github.com/skycloudd/exo_image2">GitHub</a>
+                | Trans rights are human rights
+            </p>
+        </footer>
+    </main>
 
-        <script>
-            ChangeDropdowns("image");
-        </script>
-    </body>
+    <script>
+        ChangeDropdowns("image");
+    </script>
+</body>
+
 </html>
