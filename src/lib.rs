@@ -1,13 +1,18 @@
 use base64::{engine::general_purpose, Engine as _};
-use exolvl::{Colour, Exolvl, Object, ObjectProperty, Pattern, Read as _, Vec2, Write as _};
+use exolvl::{
+    types::{
+        color::Color, exolvl::Exolvl, object::Object, object_property::ObjectProperty,
+        pattern::Pattern, theme::Theme, vec2::Vec2,
+    },
+    Read as _, Write as _,
+};
 use flate2::{write::GzEncoder, Compression};
 use image::{
     codecs::{gif::GifDecoder, png::PngEncoder},
     imageops::FilterType,
-    io::Reader,
-    AnimationDecoder, DynamicImage, Frames, GenericImageView, ImageEncoder, Rgba,
+    AnimationDecoder, DynamicImage, Frames, GenericImageView, ImageEncoder, ImageReader, Rgba,
 };
-use rand::Rng;
+use ordered_float::OrderedFloat;
 use std::{
     borrow::Cow,
     error::Error,
@@ -56,7 +61,7 @@ fn convert_image_pattern_inner(
 
     let img = read_image_bytes(image_data_url)?;
 
-    let img = Reader::new(Cursor::new(img))
+    let img = ImageReader::new(Cursor::new(img))
         .with_guessed_format()?
         .decode()?;
 
@@ -94,7 +99,7 @@ fn convert_inner(
 
     let img = read_image_bytes(image_data_url)?;
 
-    let img = Reader::new(Cursor::new(img))
+    let img = ImageReader::new(Cursor::new(img))
         .with_guessed_format()?
         .decode()?;
 
@@ -110,7 +115,7 @@ fn convert_inner(
 fn update_level_properties(level: &mut Exolvl, level_name: &str) {
     let created_time = chrono::Utc::now();
 
-    level.local_level.level_id = Uuid::new_v4().to_string();
+    level.local_level.level_id = Uuid::new_v4();
     level.local_level.level_name = level_name.to_string();
     level.local_level.creation_date = created_time;
     level.local_level.update_date = created_time;
@@ -151,12 +156,17 @@ fn pattern_frames(gif_frames: Frames) -> Result<Pattern, Box<dyn Error>> {
 
         let encoder = PngEncoder::new(&mut img_buf);
 
-        encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color())?;
+        encoder.write_image(
+            img.as_bytes(),
+            img.width(),
+            img.height(),
+            img.color().into(),
+        )?;
 
-        pattern_frames.push(exolvl::Image(img_buf));
+        pattern_frames.push(exolvl::types::image::Image(img_buf));
     }
 
-    let pattern_id = rand::thread_rng().gen::<i32>();
+    let pattern_id = rand::random::<i32>();
 
     Ok(Pattern {
         pattern_id,
@@ -169,13 +179,18 @@ fn pattern_single(img: DynamicImage) -> Result<Pattern, Box<dyn Error>> {
 
     let encoder = PngEncoder::new(&mut img_buf);
 
-    encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color())?;
+    encoder.write_image(
+        img.as_bytes(),
+        img.width(),
+        img.height(),
+        img.color().into(),
+    )?;
 
-    let pattern_id = rand::thread_rng().gen::<i32>();
+    let pattern_id = rand::random::<i32>();
 
     Ok(Pattern {
         pattern_id,
-        pattern_frames: vec![exolvl::Image(img_buf)],
+        pattern_frames: vec![exolvl::types::image::Image(img_buf)],
     })
 }
 
@@ -220,17 +235,20 @@ fn pixel_object(entity_id: i32, pixel: (u32, u32, Rgba<u8>), img: &DynamicImage)
         prefab_entity_id: 0,
         prefab_id: 0,
         position: Vec2 {
-            x: pixel.0 as f32 + 0.5,
-            y: (img.height() - pixel.1) as f32 + 0.5,
+            x: OrderedFloat(pixel.0 as f32 + 0.5),
+            y: OrderedFloat((img.height() - pixel.1) as f32 + 0.5),
         },
-        scale: Vec2 { x: 1.0, y: 1.0 },
-        rotation: 0.0,
+        scale: Vec2 {
+            x: OrderedFloat(1.0),
+            y: OrderedFloat(1.0),
+        },
+        rotation: OrderedFloat(0.0),
         tag: String::new(),
-        properties: vec![ObjectProperty::Colour(Colour {
-            r: pixel.2[0] as f32 / 255.,
-            g: pixel.2[1] as f32 / 255.,
-            b: pixel.2[2] as f32 / 255.,
-            a: pixel.2[3] as f32 / 255.,
+        properties: vec![ObjectProperty::Color(Color {
+            r: OrderedFloat(pixel.2[0] as f32 / 255.),
+            g: OrderedFloat(pixel.2[1] as f32 / 255.),
+            b: OrderedFloat(pixel.2[2] as f32 / 255.),
+            a: OrderedFloat(pixel.2[3] as f32 / 255.),
         })],
         in_layer: 1,
         in_group: 0,
@@ -239,26 +257,26 @@ fn pixel_object(entity_id: i32, pixel: (u32, u32, Rgba<u8>), img: &DynamicImage)
 }
 
 fn set_theme(level: &mut Exolvl) {
-    level.level_data.theme = "custom".to_string();
+    level.level_data.theme = Theme::Custom;
 
-    level.level_data.custom_terrain_colour = Colour {
-        r: 1.,
-        g: 1.,
-        b: 1.,
-        a: 1.,
+    level.level_data.custom_terrain_color = Color {
+        r: OrderedFloat(1.),
+        g: OrderedFloat(1.),
+        b: OrderedFloat(1.),
+        a: OrderedFloat(1.),
     };
 
-    level.level_data.custom_terrain_border_colour = Colour {
-        r: 1.,
-        g: 1.,
-        b: 1.,
-        a: 1.,
+    level.level_data.custom_terrain_border_color = Color {
+        r: OrderedFloat(1.),
+        g: OrderedFloat(1.),
+        b: OrderedFloat(1.),
+        a: OrderedFloat(1.),
     };
 
-    level.level_data.custom_background_colour = Colour {
-        r: 0.,
-        g: 0.,
-        b: 0.,
-        a: 1.,
+    level.level_data.custom_background_color = Color {
+        r: OrderedFloat(0.),
+        g: OrderedFloat(0.),
+        b: OrderedFloat(0.),
+        a: OrderedFloat(1.),
     };
 }
